@@ -19,7 +19,12 @@
 
 ## 安装步骤
 
-1. 克隆或下载本项目到本地
+1. 克隆或下载本项目到本地：
+```bash
+git clone https://github.com/lvecho/tif-splitter.git
+cd tif-splitter
+```
+
 2. 安装依赖包：
 ```bash
 pip install -r requirements.txt
