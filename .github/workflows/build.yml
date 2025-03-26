@@ -1,0 +1,42 @@
+name: Build Windows Executable
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.11'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pyinstaller
+        
+    - name: Build executable
+      run: |
+        pyinstaller --clean tif_splitter.spec
+        
+    - name: Prepare release package
+      run: |
+        mkdir "TIF图像分割工具_v1.0"
+        copy "dist\TIF图像分割工具.exe" "TIF图像分割工具_v1.0"
+        copy "使用说明.txt" "TIF图像分割工具_v1.0"
+        copy "创建桌面快捷方式.bat" "TIF图像分割工具_v1.0"
+        Compress-Archive -Path "TIF图像分割工具_v1.0" -DestinationPath "TIF图像分割工具_v1.0.zip" -Force
+        
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: TIF图像分割工具
+        path: TIF图像分割工具_v1.0.zip 
